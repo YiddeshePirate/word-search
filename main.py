@@ -4,7 +4,7 @@ import string
 import itertools
 
 board = np.empty([15, 15], dtype="U1")
-
+board[:] = " "
 # print(board)
 
 lstl = list(string.ascii_lowercase)
@@ -39,23 +39,34 @@ def getlimr(di, ln):
         return list(range(ln, 15))
 
 def place_word(word):
-    direction = random.choice(list(directions.values()))
-    bkg = random.choice([-1, 1])
-    direction = [x*bkg for x in direction]
-    starts = random.choice(posstarts(word, direction))
-    locs = getlocs(len(word), starts, direction)
-    print(locs)
-    print(direction)
-    print(starts)
-    for x, y in zip(locs, word):
-        board[x] = y
+    not_put = True
+    while not_put:
+        direction = random.choice(list(directions.values()))
+        bkg = random.choice([-1, 1])
+        direction = [x*bkg for x in direction]
+        starts = random.choice(posstarts(word, direction))
+        locs = getlocs(len(word), starts, direction)
+        print(locs)
+        if is_good_locs(word, locs):
+            print(direction)
+            print(starts)
+            for x, y in zip(locs, word):
+                board[x] = y
+            not_put = False
 
 
-# print(board)
+def is_good_locs(word, locs):
+    def cl(char, loc):
+        if board[loc] == " " or board[loc] == char:
+            return True
+    return all([cl(x, y) for x, y in zip(word, locs)])
+    
+
 
 place_word("hello")
 
 place_word(("goodbye"))
+place_word(("howdy"))
 print(board)
 
 
