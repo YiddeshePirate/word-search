@@ -1,13 +1,10 @@
 import numpy as np
 import random
-import string
-import itertools
 
 board = np.empty([15, 15], dtype="U1")
 board[:] = " "
 # print(board)
 
-lstl = list(string.ascii_lowercase)
 
 # print(itertools.permutations(range(15), range(15), ))
 
@@ -18,6 +15,7 @@ indexes = [(x, y) for x in range(15) for y in range(15)]
 directions = {"straight": (0, 1), "down": (1, 0), "diagonal1": (1, 1), "diagonal2": (-1, 1)}
 
 def getlocs(ln, origin, direction):
+    """ Gets the indexes given a direction, starting point, length"""
     x, y = origin
     d, b = direction
     return [(x+i*d, y+i*b) for i in range(ln)]
@@ -35,7 +33,7 @@ def getlimr(di, ln):
         return list(range(15))
     elif di == 1:
         return list(range(15-ln))
-    else:
+    elif:
         return list(range(ln, 15))
 
 def place_word(word):
@@ -62,12 +60,27 @@ def is_good_locs(word, locs):
     return all([cl(x, y) for x, y in zip(word, locs)])
     
 
+def fill_board():
+    ltrs = [i for i in np.nditer(board) if i != " "]
+    indexes = [(x, y) for x in range(15) for y in range(15)]
+    for i in indexes:
+        if board[i] == " ":
+            board[i] = random.choice(ltrs)
+        else:
+            pass
 
+
+print(board)
 place_word("hello")
+place_word("goodbye")
+place_word("hola")
+place_word("howdy")
 
-place_word(("goodbye"))
-place_word(("howdy"))
 print(board)
 
 
 
+
+fill_board()
+
+print(board)
