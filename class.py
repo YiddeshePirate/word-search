@@ -123,6 +123,7 @@ class word_obj():
 if __name__ == "__main__":
     bsize = int(input("Enter Board size:\n"))
     wordlist = input("Enter comma separated words: \n").strip().split(",")
+
     if all([x in itertools.chain(string.ascii_uppercase, string.ascii_lowercase) for x in wordlist]):
         pass
     else:
@@ -133,6 +134,10 @@ if __name__ == "__main__":
     for i in wordlist:
         j = word_obj(i)
         brd.add_word(j)
-    print(brd)
+    # print(brd)
     brd.fill()
     # print(brd)
+    with open("page.html", "w") as f:
+        for i in range(brd.size):
+            x = " ".join(brd.board[i,])
+            f.write(f"<h1 style=font-family: Consolas; letter-spacing:101px>{x}</h1>")
