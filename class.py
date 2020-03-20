@@ -1,5 +1,7 @@
 import numpy as np
+import itertools
 import random
+import string
 
 directions = [(x*j,y*j) for x,y in [(0, 1), (1, 0), (1, 1), (-1, 1)] for j in [-1, 1]]
 
@@ -13,27 +15,41 @@ class board():
         self.size = size
     
     def add_word(self, word_o):
+        
         put = False
+        """
+        This code must run multiple times until it finds a place for the word
+        """
         while not put:
+            # pick a random direction
             word_o.direction = random.choice(directions)
+            # get a list from the word object of possible places
             starts = word_o.posstarts(self.size)
-            print(word_o.direction)
+            # pick a random starting point
             start = random.choice(starts)
+            # get all the indexes that it will use
             takes = word_o.getlocs(start)
+
+            # make sure the locations don't have a different characters
             if board.is_good_locs(self, word_o, takes):
                 for x, y in zip(word_o.word, takes):
                     self.board[y] = x
                     self.words.append(word_o.word)
 
+                # to break out of the loop
                 put = True
             else:
                 print("retrying")
 
 
     def is_good_locs(self, word_o, locs):
+        #mini function for each character
+
         def cl(char, loc):
             if self.board[loc] == " " or self.board[loc] == char:
                 return True
+
+        #make sure it holds true for all instances
         return all([cl(x, y) for x, y in zip(word_o.word, locs)])
 
 
@@ -105,10 +121,13 @@ class word_obj():
 
 
 if __name__ == "__main__":
-    # bsize = int(input("Enter Board size:\n"))
-    # wordlist = input("Enter comma separated words: \n").strip().split(",")
-    bsize = 4
-    wordlist = ["hey","away"]
+    bsize = int(input("Enter Board size:\n"))
+    wordlist = input("Enter comma separated words: \n").strip().split(",")
+    if all([x in itertools.chain(string.ascii_uppercase, string.ascii_lowercase) for x in wordlist]):
+        pass
+    else:
+        wordlist = input("Try again:\n").strip().split(",")
+
 
     brd = board(bsize)
     for i in wordlist:
