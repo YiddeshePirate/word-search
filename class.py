@@ -114,20 +114,33 @@ class word_obj():
         return self.word
         
 
+def getwordlist(mesg):
+    wordlist = input(mesg).strip().split(",")
+    letlist = [list(x) for x in wordlist]
+    flatletlist = list(itertools.chain(*letlist))
+    if all([x in itertools.chain(string.ascii_uppercase, string.ascii_lowercase) for x in flatletlist]):
+        return wordlist
+    else:
+        getwordlist("Try again:\n")
+        wordlist = input("").strip().split(",")
 
 
 
 
+def getbsize(mesg):
+    bsize = input(mesg)
+    try:
+        int(bsize)
+        return int(bsize)
+    except:
+        getbsize("Try again:\n")
+    
 
 
 if __name__ == "__main__":
-    bsize = int(input("Enter Board size:\n"))
-    wordlist = input("Enter comma separated words: \n").strip().split(",")
+    bsize = getbsize("Enter Board size:\n")
+    wordlist = getwordlist("Enter comma separated words: \n")
 
-    if all([x in itertools.chain(string.ascii_uppercase, string.ascii_lowercase) for x in wordlist]):
-        pass
-    else:
-        wordlist = input("Try again:\n").strip().split(",")
 
 
     brd = board(bsize)
@@ -136,7 +149,7 @@ if __name__ == "__main__":
         brd.add_word(j)
     # print(brd)
     brd.fill()
-    # print(brd)
+    print(brd)
     with open("page.html", "w") as f:
         for i in range(brd.size):
             x = " ".join(brd.board[i,])
